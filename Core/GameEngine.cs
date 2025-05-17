@@ -86,35 +86,37 @@ namespace race_game.Core {
 
         private void StartGame(bool isMultiplayer) {
             CurrentScreen = CurrentScreen.Game;
-            m_menu.Visible = false;
-            m_pause_menu.Visible = false;
-            m_game.Visible = true;
+            SwitchScreens(m_menu, m_game);
             m_game.Start(isMultiplayer);
         }
 
         private void ReturnToMenu() {
             CurrentScreen = CurrentScreen.MainMenu;
-            m_menu.Visible = true;
-            m_game.Visible = false;
-            m_pause_menu.Visible = false;
+            SwitchScreens(m_game, m_menu);
         }
 
         private void PauseGame() {
             if (CurrentScreen == CurrentScreen.Game) {
                 CurrentScreen = CurrentScreen.PauseMenu;
-                m_pause_menu.Visible = true;
                 m_game.Pause(true);
-                m_game.Visible = false;
+                SwitchScreens(m_game, m_pause_menu);
             }
         }
 
         private void ResumeGame() {
             if (CurrentScreen == CurrentScreen.PauseMenu) {
                 m_game.Visible = true;
-                CurrentScreen = CurrentScreen.Game;
                 m_game.Pause(false);
-                m_pause_menu.Visible = false;
+                CurrentScreen = CurrentScreen.Game;
+                SwitchScreens(m_pause_menu, m_game);
             }
+        }
+
+        private void SwitchScreens(Control hideControl, Control showControl) {
+            m_main_form.SuspendLayout();
+            showControl.Visible = true;
+            hideControl.Visible = false; 
+            m_main_form.ResumeLayout();    
         }
     }
 }

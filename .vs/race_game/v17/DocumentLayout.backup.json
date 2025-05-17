@@ -3,8 +3,12 @@
   "WorkspaceRootPath": "C:\\prj\\race_game\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|c:\\prj\\race_game\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|c:\\prj\\race_game\\core\\gamestate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|solutionrelative:core\\gamestate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|c:\\prj\\race_game\\core\\gameengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|solutionrelative:core\\gameengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|c:\\prj\\race_game\\screens\\pausemenuscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,16 +27,12 @@
       "RelativeMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|solutionrelative:screens\\gameoverscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|c:\\prj\\race_game\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|c:\\prj\\race_game\\core\\renderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|solutionrelative:core\\renderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|c:\\prj\\race_game\\core\\gameengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|solutionrelative:core\\gameengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|c:\\prj\\race_game\\core\\gamestate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|solutionrelative:core\\gamestate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D6FC6A6F-7340-4D21-8869-64D4C93D8004}|race_game.csproj|c:\\prj\\race_game\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
@@ -55,38 +55,12 @@
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "GameOverScreen.cs",
-              "DocumentMoniker": "C:\\prj\\race_game\\Screens\\GameOverScreen.cs",
-              "RelativeDocumentMoniker": "Screens\\GameOverScreen.cs",
-              "ToolTip": "C:\\prj\\race_game\\Screens\\GameOverScreen.cs",
-              "RelativeToolTip": "Screens\\GameOverScreen.cs",
-              "ViewState": "AgIAAGYAAAAAAAAAAAAmwEQAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-17T10:04:28.439Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MainMenuScreen.cs",
-              "DocumentMoniker": "C:\\prj\\race_game\\Screens\\MainMenuScreen.cs",
-              "RelativeDocumentMoniker": "Screens\\MainMenuScreen.cs",
-              "ToolTip": "C:\\prj\\race_game\\Screens\\MainMenuScreen.cs",
-              "RelativeToolTip": "Screens\\MainMenuScreen.cs",
-              "ViewState": "AgIAAG0AAAAAAAAAAAAAAIkAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-17T07:47:26.806Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "GameScreen.cs",
               "DocumentMoniker": "C:\\prj\\race_game\\Screens\\GameScreen.cs",
               "RelativeDocumentMoniker": "Screens\\GameScreen.cs",
               "ToolTip": "C:\\prj\\race_game\\Screens\\GameScreen.cs",
               "RelativeToolTip": "Screens\\GameScreen.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-17T07:19:46.862Z",
               "EditorCaption": ""
@@ -94,12 +68,38 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "GameEngine.cs",
+              "DocumentMoniker": "C:\\prj\\race_game\\Core\\GameEngine.cs",
+              "RelativeDocumentMoniker": "Core\\GameEngine.cs",
+              "ToolTip": "C:\\prj\\race_game\\Core\\GameEngine.cs",
+              "RelativeToolTip": "Core\\GameEngine.cs",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAuwGUAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-17T07:19:44.108Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainMenuScreen.cs",
+              "DocumentMoniker": "C:\\prj\\race_game\\Screens\\MainMenuScreen.cs",
+              "RelativeDocumentMoniker": "Screens\\MainMenuScreen.cs",
+              "ToolTip": "C:\\prj\\race_game\\Screens\\MainMenuScreen.cs",
+              "RelativeToolTip": "Screens\\MainMenuScreen.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-17T07:47:26.806Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "PauseMenuScreen.cs",
               "DocumentMoniker": "C:\\prj\\race_game\\Screens\\PauseMenuScreen.cs",
               "RelativeDocumentMoniker": "Screens\\PauseMenuScreen.cs",
               "ToolTip": "C:\\prj\\race_game\\Screens\\PauseMenuScreen.cs",
               "RelativeToolTip": "Screens\\PauseMenuScreen.cs",
-              "ViewState": "AgIAAGkAAAAAAAAAAAAAAIoAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-17T09:37:22.701Z",
               "EditorCaption": ""
@@ -107,6 +107,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "GameState.cs",
+              "DocumentMoniker": "C:\\prj\\race_game\\Core\\GameState.cs",
+              "RelativeDocumentMoniker": "Core\\GameState.cs",
+              "ToolTip": "C:\\prj\\race_game\\Core\\GameState.cs",
+              "RelativeToolTip": "Core\\GameState.cs",
+              "ViewState": "AgIAABgBAAAAAAAAAAAswC8BAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-17T07:28:56.628Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GameOverScreen.cs",
+              "DocumentMoniker": "C:\\prj\\race_game\\Screens\\GameOverScreen.cs",
+              "RelativeDocumentMoniker": "Screens\\GameOverScreen.cs",
+              "ToolTip": "C:\\prj\\race_game\\Screens\\GameOverScreen.cs",
+              "RelativeToolTip": "Screens\\GameOverScreen.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-17T10:04:28.439Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\prj\\race_game\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -119,7 +145,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "Renderer.cs",
               "DocumentMoniker": "C:\\prj\\race_game\\Core\\Renderer.cs",
               "RelativeDocumentMoniker": "Core\\Renderer.cs",
@@ -127,34 +153,7 @@
               "RelativeToolTip": "Core\\Renderer.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAADwv6oAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-17T07:26:27.63Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "GameEngine.cs",
-              "DocumentMoniker": "C:\\prj\\race_game\\Core\\GameEngine.cs",
-              "RelativeDocumentMoniker": "Core\\GameEngine.cs",
-              "ToolTip": "C:\\prj\\race_game\\Core\\GameEngine.cs",
-              "RelativeToolTip": "Core\\GameEngine.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHAAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-17T07:19:44.108Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "GameState.cs",
-              "DocumentMoniker": "C:\\prj\\race_game\\Core\\GameState.cs",
-              "RelativeDocumentMoniker": "Core\\GameState.cs",
-              "ToolTip": "C:\\prj\\race_game\\Core\\GameState.cs",
-              "RelativeToolTip": "Core\\GameState.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAN8AAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-17T07:28:56.628Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-17T07:26:27.63Z"
             },
             {
               "$type": "Document",

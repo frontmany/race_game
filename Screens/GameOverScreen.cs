@@ -17,6 +17,12 @@ namespace race_game.Screens {
             m_main_form = mainForm;
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.FromArgb(220, 0, 0, 0);
+
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer |
+                          ControlStyles.UserPaint |
+                          ControlStyles.AllPaintingInWmPaint, true);
+            this.UpdateStyles();
         }
 
         public void InitializeUI() {

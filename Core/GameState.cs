@@ -206,7 +206,7 @@ namespace race_game.Core {
 
             if (m_random.NextDouble() < (1.0 / (60.0 * m_trafficSpawnRate))) {
                 if (IsMultiplayer) {
-                    TrySpawnTrafficCar(10, m_width / 2 - 70); 
+                    TrySpawnTrafficCar(50, m_width / 2 - 70); 
                     TrySpawnTrafficCar(m_width / 2 + 70, m_width - 10); 
                 }
                 else {
@@ -296,6 +296,13 @@ namespace race_game.Core {
                         CrashedPlayerNumber = 2;
                         return;
                     }
+                }
+
+                // Проверка столкновения между игроками
+                if (player1Rect.IntersectsWith(player2Rect)) {
+                    Status = GameStatus.GameOver;
+                    CrashedPlayerNumber = -1;
+                    return;
                 }
             }
         }

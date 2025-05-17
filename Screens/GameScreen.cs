@@ -23,6 +23,12 @@ namespace race_game.Screens
 
             m_game_timer = new System.Windows.Forms.Timer { Interval = 1 }; 
             m_game_timer.Tick += GameTimer_Tick;
+
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer |
+                          ControlStyles.UserPaint |
+                          ControlStyles.AllPaintingInWmPaint, true);
+            this.UpdateStyles();
         }
 
         public void Start(bool isMultiplayer) {

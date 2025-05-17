@@ -19,6 +19,12 @@ namespace race_game.Screens {
             m_main_form = mainForm;
             m_array_menu_buttons = new Button[m_buttons_count];
 
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer |
+                          ControlStyles.UserPaint |
+                          ControlStyles.AllPaintingInWmPaint, true);
+            this.UpdateStyles();
+
             InitializeUI();
             SetupButtonHandlers();
         }
