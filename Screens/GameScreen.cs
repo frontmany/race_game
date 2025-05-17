@@ -3,23 +3,17 @@
 namespace race_game.Screens
 {
     public class GameScreen : Panel {
-        private readonly GameState m_state;
-        private readonly Renderer m_renderer;
         private readonly System.Windows.Forms.Timer m_game_timer;
-        Action m_game_over_call_back;
+        private readonly GameState                  m_state;
+        private readonly Renderer                   m_renderer;
+        Action                                      m_game_over_call_back;
 
-
-        public GameState GetGameState() {
-            return m_state;
-        }
-
-        public GameScreen(Action gameOverCallBack, int width, int height) {
+        public GameScreen(Action gameOverCallBack, int mainFormWidth, int mainFormHeight) {
             m_game_over_call_back = gameOverCallBack;
             this.Dock = DockStyle.Fill;
-            this.DoubleBuffered = true;
 
-            m_state = new GameState(width, height);
-            m_renderer = new Renderer(width, height);
+            m_state = new GameState(mainFormWidth, mainFormHeight);
+            m_renderer = new Renderer(mainFormWidth, mainFormHeight);
 
             m_game_timer = new System.Windows.Forms.Timer { Interval = 1 }; 
             m_game_timer.Tick += GameTimer_Tick;
@@ -31,11 +25,16 @@ namespace race_game.Screens
             this.UpdateStyles();
         }
 
+        public GameState GetGameState() {
+            return m_state;
+        }
+
         public void Start(bool isMultiplayer) {
             
             m_state.Init(isMultiplayer);
             m_game_timer.Start();
         }
+
         public void Pause(bool isPaused) {
             if (isPaused) {
                 m_state.Status = GameState.GameStatus.Paused;
@@ -57,6 +56,15 @@ namespace race_game.Screens
             }
         }
 
+
+
+        protected override void OnPaint(PaintEventArgs e) {
+            m_renderer.Render(e.Graphics, m_state);
+            base.OnPaint(e);
+        }
+
+
+
         private void GameTimer_Tick(object? sender, EventArgs? e) {
             if (m_state.Status == GameState.GameStatus.Racing) {
                 m_state.Update();
@@ -66,11 +74,6 @@ namespace race_game.Screens
                 }
                 this.Invalidate();
             }
-        }
-
-        protected override void OnPaint(PaintEventArgs e) {
-            m_renderer.Render(e.Graphics, m_state);
-            base.OnPaint(e);
         }
     }
 }

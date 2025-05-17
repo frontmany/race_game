@@ -13,10 +13,12 @@ static class Program {
             Text = "Racing Game",
             FormBorderStyle = FormBorderStyle.None,
             WindowState = FormWindowState.Maximized,
-            Bounds = Screen.PrimaryScreen?.Bounds ?? new Rectangle(0, 0, 640, 480)
+            Bounds = Screen.PrimaryScreen?.Bounds ?? new Rectangle(0, 0, 1920, 1080)
         };
 
-        new GameEngine(mainForm);
+        var gameEngine = new GameEngine(mainForm);
+        gameEngine.Init();
+
         Application.Run(mainForm);
     }
 }

@@ -9,34 +9,46 @@ namespace race_game.Core {
     }
 
     public class GameEngine {
-        private readonly Form m_main_form;
-        private readonly MainMenuScreen m_menu;
-        private readonly GameScreen m_game;
-        private readonly PauseMenuScreen m_pause_menu;
-        private GameOverScreen m_game_over_screen;
-        public CurrentScreen CurrentScreen { get; private set; }
+        private Form            m_main_form;
+        private MainMenuScreen  m_menu;
+        private GameScreen      m_game;
+        private PauseMenuScreen m_pause_menu;
+        private GameOverScreen  m_game_over_screen;
+        int                     m_main_form_width, m_main_form_height;
 
         public GameEngine(Form mainForm) {
             CurrentScreen = CurrentScreen.MainMenu;
             m_main_form = mainForm;
             m_main_form.KeyPreview = true;
+            m_main_form_width = mainForm.ClientSize.Width;
+            m_main_form_height = mainForm.ClientSize.Height;
             m_main_form.KeyDown += HandleKeyDown;
             m_main_form.KeyUp += HandleKeyUp;
+        }
 
-            m_menu = new MainMenuScreen(StartGame, mainForm);
-            m_game = new GameScreen(ShowGameOver, mainForm.ClientSize.Width, mainForm.ClientSize.Height);
-            m_pause_menu = new PauseMenuScreen(ResumeGame, ReturnToMenu, mainForm);
-            m_game_over_screen = new GameOverScreen(ReturnToMenu, mainForm);
+        public void Init() {
+            m_menu = new MainMenuScreen(StartGame, m_main_form_width, m_main_form_height);
+            m_menu.SetupPanelUI();
+            m_menu.SetupButtonHandlers();
 
-            m_game.Visible = false;
+            m_pause_menu = new PauseMenuScreen(ResumeGame, ReturnToMenu, m_main_form_width, m_main_form_height);
+            m_pause_menu.SetupPanelUI();
+            m_pause_menu.SetupButtonHandlers();
             m_pause_menu.Visible = false;
+
+            m_game = new GameScreen(ShowGameOver, m_main_form_width, m_main_form_height);
+            m_game.Visible = false;
+
+            m_game_over_screen = new GameOverScreen(ReturnToMenu, m_main_form_width, m_main_form_height);
             m_game_over_screen.Visible = false;
 
-            mainForm.Controls.Add(m_menu);
-            mainForm.Controls.Add(m_game);
-            mainForm.Controls.Add(m_pause_menu);
-            mainForm.Controls.Add(m_game_over_screen);
+            m_main_form.Controls.Add(m_menu);
+            m_main_form.Controls.Add(m_game);
+            m_main_form.Controls.Add(m_pause_menu);
+            m_main_form.Controls.Add(m_game_over_screen);
         }
+
+        public CurrentScreen CurrentScreen { get; private set; }
 
         public void ShowGameOver() {
             CurrentScreen = CurrentScreen.GameOver;
@@ -45,9 +57,10 @@ namespace race_game.Core {
             m_game_over_screen.FirstPlayerScore = m_game.GetGameState().Player1Score;
             m_game_over_screen.SecondPlayerScore = m_game.GetGameState().Player2Score;
             m_game_over_screen.CrashedPlayerNumber = m_game.GetGameState().CrashedPlayerNumber;
-            m_game_over_screen.InitializeUI();
+            m_game_over_screen.setupPanelUI();
             m_game_over_screen.Visible = true;
         }
+
 
 
         private void HandleKeyDown(object? sender, KeyEventArgs? e) {

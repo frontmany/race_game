@@ -6,14 +6,17 @@ using System.Windows.Forms;
 namespace race_game.Screens {
     public class MainMenuScreen : Panel {
         private readonly Action<bool>   m_start_game_callback;
-        private Form                    m_main_form;
         private Button[]                m_array_menu_buttons;
-        int                             m_buttons_count = 3;
-        int                             m_selected_index = 0;
+        int                             m_buttons_count;
+        int                             m_selected_index;
+        int                             m_main_form_width, m_main_form_height;
 
-        public MainMenuScreen(Action<bool> startGameCallback, Form mainForm) {
+        public MainMenuScreen(Action<bool> startGameCallback, int mainFormWidth, int mainFormHeight) {
+            m_buttons_count = 3;
+            m_selected_index = 0;
+            m_main_form_width = mainFormWidth;
+            m_main_form_height = mainFormHeight;
             m_start_game_callback = startGameCallback;
-            m_main_form = mainForm;
             m_array_menu_buttons = new Button[m_buttons_count];
 
             this.DoubleBuffered = true;
@@ -21,18 +24,15 @@ namespace race_game.Screens {
                           ControlStyles.UserPaint |
                           ControlStyles.AllPaintingInWmPaint, true);
             this.UpdateStyles();
-
-            InitializeUI();
-            SetupButtonHandlers();
         }
 
-        private void InitializeUI() {
+        public void SetupPanelUI() {
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.Navy;
 
             var centerPanel = new Panel {
                 Size = new Size(400, 600),
-                Location = new Point((m_main_form.Width - 400) / 2, (m_main_form.Height - 600) / 2 - 100),
+                Location = new Point((m_main_form_width - 400) / 2, (m_main_form_height - 600) / 2 - 100),
                 BackColor = Color.Transparent
             };
             this.Controls.Add(centerPanel);
@@ -65,6 +65,14 @@ namespace race_game.Screens {
             }
         }
 
+        public void SetupButtonHandlers() {
+            m_array_menu_buttons[0].Click += (s, e) => m_start_game_callback(false);
+            m_array_menu_buttons[1].Click += (s, e) => m_start_game_callback(true);
+            m_array_menu_buttons[2].Click += (s, e) => Application.Exit();
+
+            m_array_menu_buttons[0].Focus();
+            HighlightButton(m_array_menu_buttons[0]);
+        }
 
         public void HandleKeyDown(object? sender, KeyEventArgs? e) {
             switch (e.KeyCode) {
@@ -90,11 +98,9 @@ namespace race_game.Screens {
 
         }
 
-        public void HandleKeyUp(object? sender, KeyEventArgs? e) { }
+        public void HandleKeyUp(object? sender, KeyEventArgs? e) {}
 
-        public void HandleKeyboardEvent(object? sender, KeyEventArgs? e) {
-            
-        }
+
 
         private Button CreateMenuButton(string text, int xPos, int yPos, int width, int height) {
             var button = new Button {
@@ -119,15 +125,6 @@ namespace race_game.Screens {
 
 
             return button;
-        }
-
-        private void SetupButtonHandlers() {
-            m_array_menu_buttons[0].Click += (s, e) => m_start_game_callback(false);
-            m_array_menu_buttons[1].Click += (s, e) => m_start_game_callback(true);
-            m_array_menu_buttons[2].Click += (s, e) => Application.Exit();
-
-            m_array_menu_buttons[0].Focus();
-            HighlightButton(m_array_menu_buttons[0]);
         }
 
         private void HighlightButton(Button button) {
