@@ -192,11 +192,9 @@ namespace race_game.Core {
         }
 
         private void UpdateRoadAndTraffic() {
-            // 1. Обновление времени и прокрутки дороги
             ElapsedTime = ElapsedTime.Add(TimeSpan.FromSeconds(1 / 60f));
             RoadState.ScrollOffset = (RoadState.ScrollOffset + (int)(5 * GameSpeed)) % 100;
 
-            // 2. Движение существующих машин
             foreach (var trafficCar in TrafficCars) {
                 trafficCar.Bounds = new Rectangle(
                     trafficCar.Bounds.X,
@@ -206,42 +204,71 @@ namespace race_game.Core {
                 );
             }
 
-            // 3. Генерация новых машин (с учетом мультиплеера)
             if (m_random.NextDouble() < (1.0 / (60.0 * m_trafficSpawnRate))) {
                 if (IsMultiplayer) {
-                    // Левая половина экрана (игрок 1)
-                    int leftLaneMin = 10; // Отступ от края
-                    int leftLaneMax = m_width / 2 - 20; // До середины с отступом
-                    int leftLaneX = m_random.Next(leftLaneMin, leftLaneMax);
-
-                    TrafficCars.Add(new TrafficCarState {
-                        Bounds = new Rectangle(leftLaneX, -100, 50, 90),
-                        Speed = 3 + (float)m_random.NextDouble() * 3.0f
-                    });
-
-                    // Правая половина экрана (игрок 2)
-                    int rightLaneMin = m_width / 2 + 20; // От середины с отступом
-                    int rightLaneMax = m_width - 10; // До края с отступом
-                    int rightLaneX = m_random.Next(rightLaneMin, rightLaneMax);
-
-                    TrafficCars.Add(new TrafficCarState {
-                        Bounds = new Rectangle(rightLaneX, -100, 50, 90),
-                        Speed = 3 + (float)m_random.NextDouble() * 3.0f
-                    });
+                    TrySpawnTrafficCar(10, m_width / 2 - 70); 
+                    TrySpawnTrafficCar(m_width / 2 + 70, m_width - 10); 
                 }
-                else // Одиночная игра
-                {
-                    int xPos = m_random.Next(roadLeft + 50, roadLeft + roadWidth - 50);
-                    TrafficCars.Add(new TrafficCarState {
-                        Bounds = new Rectangle(xPos, -100, 50, 90),
-                        Speed = 3 + (float)m_random.NextDouble() * 3.0f
-                    });
+                else {
+                    TrySpawnTrafficCar(roadLeft + 50, roadLeft + roadWidth - 50);
                 }
             }
 
-            // 4. Удаление машин за пределами экрана
             TrafficCars.RemoveAll(car => car.Bounds.Bottom > m_height + playerHeight + 50);
         }
+
+        private void TrySpawnTrafficCar(int minX, int maxX) {
+            const int carWidth = 55;
+            const int carHeight = 90;
+            const int spawnHeight = -100;
+            const int safetyMargin = 25; 
+
+            int attempts = 5; 
+            bool spawned = false;
+
+            while (attempts-- > 0 && !spawned) {
+                int xPos = m_random.Next(minX, maxX - carWidth);
+                float speed = 3 + (float)m_random.NextDouble() * 3.0f;
+
+                var newCarRect = new Rectangle(xPos, spawnHeight, carWidth, carHeight);
+
+                bool canSpawn = true;
+
+                foreach (var existingCar in TrafficCars) {
+                    var safetyRect = new Rectangle(
+                        existingCar.Bounds.X - safetyMargin,
+                        existingCar.Bounds.Y,
+                        existingCar.Bounds.Width + safetyMargin * 2,
+                        existingCar.Bounds.Height
+                    );
+
+                    if (newCarRect.IntersectsWith(safetyRect)) {
+                        if (speed > existingCar.Speed) {
+                            canSpawn = false;
+                            break;
+                        }
+                    }
+
+                   
+                    if (existingCar.Bounds.X < xPos + carWidth &&
+                        existingCar.Bounds.X + existingCar.Bounds.Width > xPos &&
+                        existingCar.Bounds.Y > newCarRect.Y &&
+                        existingCar.Speed < speed) {
+                        canSpawn = false;
+                        break;
+                    }
+                }
+
+                if (canSpawn) {
+                    TrafficCars.Add(new TrafficCarState {
+                        Bounds = newCarRect,
+                        Speed = speed
+                    });
+                    spawned = true;
+                }
+            }
+        }
+
 
         private void UpdateGameProgress() {
             Player1Score += (int)(10 * GameSpeed);

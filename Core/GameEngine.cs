@@ -94,26 +94,26 @@ namespace race_game.Core {
 
         private void ReturnToMenu() {
             CurrentScreen = CurrentScreen.MainMenu;
+            m_menu.Visible = true;
             m_game.Visible = false;
             m_pause_menu.Visible = false;
-            m_menu.Visible = true;
         }
 
         private void PauseGame() {
             if (CurrentScreen == CurrentScreen.Game) {
                 CurrentScreen = CurrentScreen.PauseMenu;
+                m_pause_menu.Visible = true;
                 m_game.Pause(true);
                 m_game.Visible = false;
-                m_pause_menu.Visible = true;
             }
         }
 
         private void ResumeGame() {
             if (CurrentScreen == CurrentScreen.PauseMenu) {
+                m_game.Visible = true;
                 CurrentScreen = CurrentScreen.Game;
                 m_game.Pause(false);
                 m_pause_menu.Visible = false;
-                m_game.Visible = true;
             }
         }
     }

@@ -21,7 +21,7 @@ namespace race_game.Screens
             m_state = new GameState(width, height);
             m_renderer = new Renderer(width, height);
 
-            m_game_timer = new System.Windows.Forms.Timer { Interval = 16 }; 
+            m_game_timer = new System.Windows.Forms.Timer { Interval = 1 }; 
             m_game_timer.Tick += GameTimer_Tick;
         }
 

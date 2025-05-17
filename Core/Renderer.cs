@@ -92,8 +92,8 @@ namespace race_game.Core {
             for (int i = 0; i < 2; i++) {
                 int currentRoadLeft = i == 0 ? road1Left : road2Left;
 
-                g.FillRectangle(_grassBrush, currentRoadLeft - 10, 0, 10, m_height); // Левая граница
-                g.FillRectangle(_grassBrush, currentRoadLeft + roadWidth, 0, 10, m_height); // Правая граница
+                g.FillRectangle(_grassBrush, currentRoadLeft - 10, 0, 10, m_height); 
+                g.FillRectangle(_grassBrush, currentRoadLeft + roadWidth, 0, 10, m_height);
 
                 g.FillRectangle(Brushes.DarkGray, currentRoadLeft, 0, roadWidth, m_height);
 
@@ -112,11 +112,12 @@ namespace race_game.Core {
         }
 
         private void DrawCar(Graphics g, Rectangle bounds, Brush brush) {
-            // 1. Кузов машины (с закругленными углами)
-            using (GraphicsPath carBody = new GraphicsPath()) {
-                float cornerRadius = 10f; // Радиус закругления
 
-                carBody.AddArc(bounds.X, bounds.Y, cornerRadius, cornerRadius, 180, 90); // Верхний левый угол
+            // body
+            using (GraphicsPath carBody = new GraphicsPath()) {
+                float cornerRadius = 10f;
+
+                carBody.AddArc(bounds.X, bounds.Y, cornerRadius, cornerRadius, 180, 90);
                 carBody.AddArc(bounds.X + bounds.Width - cornerRadius, bounds.Y, cornerRadius, cornerRadius, 270, 90); // Верхний правый угол
                 carBody.AddArc(bounds.X + bounds.Width - cornerRadius, bounds.Y + bounds.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90); // Нижний правый угол
                 carBody.AddArc(bounds.X, bounds.Y + bounds.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90); // Нижний левый угол
@@ -125,7 +126,7 @@ namespace race_game.Core {
                 g.FillPath(brush, carBody);
             }
 
-            // 2. Окна (с закругленными углами)
+            // window
             using (GraphicsPath windowPath = new GraphicsPath()) {
                 float cornerRadius = 10f;
 
@@ -139,7 +140,7 @@ namespace race_game.Core {
                 g.FillPath(Brushes.LightBlue, windowPath);
             }
 
-            // 3. Фары
+            // lights
             g.FillEllipse(Brushes.Yellow,
                 bounds.X + 5,
                 bounds.Y + 5,
@@ -149,7 +150,7 @@ namespace race_game.Core {
                 bounds.Y + 5,
                 10, 10);
 
-            // 4. Колеса
+            // wheels
             g.FillEllipse(Brushes.Black,
                 bounds.X - 5,
                 bounds.Y + 20,
@@ -167,8 +168,6 @@ namespace race_game.Core {
                 bounds.Y + 55,
                 10, 25);
         }
-
-
 
         private void DrawHUD(Graphics g, GameState state) {
             Brush player1ScoreBrush = state.IsFirstPlayerOnGrass ? Brushes.Red : Brushes.White;
