@@ -6,6 +6,7 @@ namespace race_game.Screens {
     public class GameOverScreen : Panel {
         public bool IsMultiplayer { get; set; }
         public int FirstPlayerScore { get; set; }
+        public int CrashedPlayerNumber { get; set; }
         public int SecondPlayerScore { get; set; }
 
         private readonly Action m_return_to_menu_callback;
@@ -49,11 +50,11 @@ namespace race_game.Screens {
                 string winnerText;
                 Color winnerColor;
 
-                if (FirstPlayerScore > SecondPlayerScore) {
+                if (CrashedPlayerNumber == 2) {
                     winnerText = "PLAYER 1 WINS!";
                     winnerColor = Color.Red;
                 }
-                else if (SecondPlayerScore > FirstPlayerScore) {
+                else if (CrashedPlayerNumber == 1) {
                     winnerText = "PLAYER 2 WINS!";
                     winnerColor = Color.Blue;
                 }
@@ -74,9 +75,9 @@ namespace race_game.Screens {
                 centerPanel.Controls.Add(winnerLabel);
                 yPos += 70;
 
-                AddCenteredLabel(centerPanel, $"PLAYER 1: {FirstPlayerScore}", Color.Red, yPos);
+                AddCenteredLabel(centerPanel, $"PLAYER 1: {FirstPlayerScore}", Color.White, yPos);
                 yPos += 50;
-                AddCenteredLabel(centerPanel, $"PLAYER 2: {SecondPlayerScore}", Color.Blue, yPos);
+                AddCenteredLabel(centerPanel, $"PLAYER 2: {SecondPlayerScore}", Color.White, yPos);
                 yPos += 80;
             }
             else {

@@ -44,6 +44,7 @@ namespace race_game.Core {
             m_game_over_screen.IsMultiplayer = m_game.GetGameState().IsMultiplayer;
             m_game_over_screen.FirstPlayerScore = m_game.GetGameState().Player1Score;
             m_game_over_screen.SecondPlayerScore = m_game.GetGameState().Player2Score;
+            m_game_over_screen.CrashedPlayerNumber = m_game.GetGameState().CrashedPlayerNumber;
             m_game_over_screen.InitializeUI();
             m_game_over_screen.Visible = true;
         }

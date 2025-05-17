@@ -11,6 +11,10 @@ namespace race_game.Core {
         private const int playerHeight = 100;
         private int roadLeft, roadWidth;
 
+        private float m_trafficSpawnRate = 1.0f; 
+        private const float m_maxTrafficSpawnRate = 0.3f; 
+        private const float m_difficultyIncreaseInterval = 30.0f;
+
         public GameState(int width, int height) {
             m_random = new Random();
             HashSetPressedKeys = new HashSet<Keys>();
@@ -25,6 +29,7 @@ namespace race_game.Core {
         public bool IsMultiplayer { get; set; }
         public bool IsFirstPlayerOnGrass { get; set; }
         public bool IsSecondPlayerOnGrass { get; set; }
+        public int CrashedPlayerNumber { get; set; }
         public int Player1Score { get; set; }
         public int Player2Score { get; set; }
         public float GameSpeed { get; set; } = 1.0f;
@@ -44,6 +49,7 @@ namespace race_game.Core {
 
         public void Init(bool isMultiplayer) {
             HashSetPressedKeys.Clear();
+            moveSpeed = 5;
             IsMultiplayer = isMultiplayer;
             Player1Score = 0;
             Player2Score = 0;
@@ -90,15 +96,26 @@ namespace race_game.Core {
         }
 
         public void Update() {
-            if (Status != GameStatus.Racing || IsPaused)
-                return;
+            if (Status != GameStatus.Racing || IsPaused) return;
 
+            UpdateDifficulty(); 
             UpdatePlayerMovement();
             CheckOffRoad();
             UpdateRoadAndTraffic();
             CheckCollisions();
             UpdateGameProgress();
         }
+
+        private void UpdateDifficulty() {
+            m_trafficSpawnRate = Math.Max(
+                m_maxTrafficSpawnRate,
+                1.0f - (float)(ElapsedTime.TotalSeconds / 120.0)
+            );
+
+            moveSpeed = 5 + (int)(ElapsedTime.TotalSeconds / 30.0);
+            moveSpeed = Math.Min(moveSpeed, 10);
+        }
+
 
         private void UpdatePlayerMovement() {
             if (Player1 != null) {
@@ -175,43 +192,71 @@ namespace race_game.Core {
         }
 
         private void UpdateRoadAndTraffic() {
+            // 1. Обновление времени и прокрутки дороги
             ElapsedTime = ElapsedTime.Add(TimeSpan.FromSeconds(1 / 60f));
             RoadState.ScrollOffset = (RoadState.ScrollOffset + (int)(5 * GameSpeed)) % 100;
 
+            // 2. Движение существующих машин
             foreach (var trafficCar in TrafficCars) {
                 trafficCar.Bounds = new Rectangle(
                     trafficCar.Bounds.X,
-                    trafficCar.Bounds.Y + (int)(GameSpeed * 3),
+                    trafficCar.Bounds.Y + (int)(trafficCar.Speed * GameSpeed),
                     trafficCar.Bounds.Width,
-                    trafficCar.Bounds.Height);
+                    trafficCar.Bounds.Height
+                );
             }
 
-            if (ElapsedTime.TotalSeconds % 1 < 1 / 60f) {
-                if (GetRandomBool()) {
-                    int lane = m_random.Next(IsMultiplayer ? 2 : 3);
-                    int xPos = IsMultiplayer ?
-                        (lane == 0 ? m_random.Next(100, 300) : m_random.Next(400, 600)) :
-                        m_random.Next(roadLeft + 50, roadLeft + roadWidth - 50);
+            // 3. Генерация новых машин (с учетом мультиплеера)
+            if (m_random.NextDouble() < (1.0 / (60.0 * m_trafficSpawnRate))) {
+                if (IsMultiplayer) {
+                    // Левая половина экрана (игрок 1)
+                    int leftLaneMin = 10; // Отступ от края
+                    int leftLaneMax = m_width / 2 - 20; // До середины с отступом
+                    int leftLaneX = m_random.Next(leftLaneMin, leftLaneMax);
 
                     TrafficCars.Add(new TrafficCarState {
-                        Bounds = new Rectangle(xPos, -100, 50, 100),
-                        Speed = 3 + (float)m_random.NextDouble()
+                        Bounds = new Rectangle(leftLaneX, -100, 50, 90),
+                        Speed = 3 + (float)m_random.NextDouble() * 3.0f
+                    });
+
+                    // Правая половина экрана (игрок 2)
+                    int rightLaneMin = m_width / 2 + 20; // От середины с отступом
+                    int rightLaneMax = m_width - 10; // До края с отступом
+                    int rightLaneX = m_random.Next(rightLaneMin, rightLaneMax);
+
+                    TrafficCars.Add(new TrafficCarState {
+                        Bounds = new Rectangle(rightLaneX, -100, 50, 90),
+                        Speed = 3 + (float)m_random.NextDouble() * 3.0f
+                    });
+                }
+                else // Одиночная игра
+                {
+                    int xPos = m_random.Next(roadLeft + 50, roadLeft + roadWidth - 50);
+                    TrafficCars.Add(new TrafficCarState {
+                        Bounds = new Rectangle(xPos, -100, 50, 90),
+                        Speed = 3 + (float)m_random.NextDouble() * 3.0f
                     });
                 }
             }
 
-            for (int i = TrafficCars.Count - 1; i >= 0; i--) {
-                if (TrafficCars[i].Bounds.Bottom > m_height + playerHeight + 50) {
-                    TrafficCars.RemoveAt(i);
-                }
-            }
+            // 4. Удаление машин за пределами экрана
+            TrafficCars.RemoveAll(car => car.Bounds.Bottom > m_height + playerHeight + 50);
         }
 
-        private void CheckCollisions() {
+        private void UpdateGameProgress() {
+            Player1Score += (int)(10 * GameSpeed);
+            if (IsMultiplayer) Player2Score += (int)(10 * GameSpeed);
+
+            GameSpeed = Math.Min(1.5f + (float)(ElapsedTime.TotalSeconds / 120.0), 2.5f);
+        }
+    
+
+    private void CheckCollisions() {
             var player1Rect = new Rectangle(Player1.Position.X, Player1.Position.Y, 50, 100);
             foreach (var trafficCar in TrafficCars) {
                 if (player1Rect.IntersectsWith(trafficCar.Bounds)) {
                     Status = GameStatus.GameOver;
+                    CrashedPlayerNumber = 1;
                     return;
                 }
             }
@@ -221,23 +266,10 @@ namespace race_game.Core {
                 foreach (var trafficCar in TrafficCars) {
                     if (player2Rect.IntersectsWith(trafficCar.Bounds)) {
                         Status = GameStatus.GameOver;
+                        CrashedPlayerNumber = 2;
                         return;
                     }
                 }
-            }
-        }
-
-        private void UpdateGameProgress() {
-            Player1Score += (int)(10 * GameSpeed);
-            if (IsMultiplayer) {
-                Player2Score += (int)(10 * GameSpeed);
-            }
-
-            if (Player1Score % 500 == 0 || (IsMultiplayer && Player2Score % 500 == 0)) {
-                GameSpeed = Math.Min(GameSpeed + 0.1f, 2.0f);
-            }
-            if (Player1Score % 5000 == 0 || (IsMultiplayer && Player2Score % 5000 == 0)) {
-                moveSpeed++;
             }
         }
 

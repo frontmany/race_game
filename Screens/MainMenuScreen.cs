@@ -27,7 +27,7 @@ namespace race_game.Screens {
 
             var centerPanel = new Panel {
                 Size = new Size(400, 600),
-                Location = new Point((m_main_form.Width - 400) / 2, (m_main_form.Height - 600) / 2),
+                Location = new Point((m_main_form.Width - 400) / 2, (m_main_form.Height - 600) / 2 - 100),
                 BackColor = Color.Transparent
             };
             this.Controls.Add(centerPanel);

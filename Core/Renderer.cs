@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace race_game.Core {
     public class Renderer {
@@ -35,21 +36,21 @@ namespace race_game.Core {
                 var carRect = new Rectangle(
                     trafficCar.Bounds.X - 25,
                     trafficCar.Bounds.Y - 50,
-                    50, 100);
+                    50, 90);
                 DrawCar(g, carRect, _trafficCarBrush);
             }
 
             var player1Rect = new Rectangle(
                 state.Player1.Position.X - 25,
                 state.Player1.Position.Y - 50,
-                50, 100);
+                50, 90);
             DrawCar(g, player1Rect, _playerCarBrush);
 
             if (state.IsMultiplayer && state.Player2 != null) {
                 var player2Rect = new Rectangle(
                     state.Player2.Position.X - 25,
                     state.Player2.Position.Y - 50,
-                    50, 100);
+                    50, 90);
                 DrawCar(g, player2Rect, _player2CarBrush);
             }
 
@@ -59,6 +60,7 @@ namespace race_game.Core {
         private void DrawSinglePlayerRoad(Graphics g, RoadState road) {
             int roadWidth = m_width / 2;
             int roadLeft = (m_width - roadWidth) / 2;
+    
 
             g.FillRectangle(_grassBrush, 0, 0, roadLeft, m_height); 
             g.FillRectangle(_grassBrush, roadLeft + roadWidth, 0, roadLeft, m_height);
@@ -110,15 +112,32 @@ namespace race_game.Core {
         }
 
         private void DrawCar(Graphics g, Rectangle bounds, Brush brush) {
-            // 1. Кузов машины
-            g.FillRectangle(brush, bounds);
+            // 1. Кузов машины (с закругленными углами)
+            using (GraphicsPath carBody = new GraphicsPath()) {
+                float cornerRadius = 10f; // Радиус закругления
 
-            // 2. Окна
-            g.FillRectangle(Brushes.LightBlue,
-                bounds.X + 5,
-                bounds.Y + 15,
-                bounds.Width - 10,
-                25);
+                carBody.AddArc(bounds.X, bounds.Y, cornerRadius, cornerRadius, 180, 90); // Верхний левый угол
+                carBody.AddArc(bounds.X + bounds.Width - cornerRadius, bounds.Y, cornerRadius, cornerRadius, 270, 90); // Верхний правый угол
+                carBody.AddArc(bounds.X + bounds.Width - cornerRadius, bounds.Y + bounds.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90); // Нижний правый угол
+                carBody.AddArc(bounds.X, bounds.Y + bounds.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90); // Нижний левый угол
+                carBody.CloseFigure();
+
+                g.FillPath(brush, carBody);
+            }
+
+            // 2. Окна (с закругленными углами)
+            using (GraphicsPath windowPath = new GraphicsPath()) {
+                float cornerRadius = 10f;
+
+                Rectangle windowBounds = new Rectangle(bounds.X + 7, bounds.Y + 20, bounds.Width - 15, 20);
+                windowPath.AddArc(windowBounds.X, windowBounds.Y, cornerRadius, cornerRadius, 180, 90); // Верхний левый угол
+                windowPath.AddArc(windowBounds.X + windowBounds.Width - cornerRadius, windowBounds.Y, cornerRadius, cornerRadius, 270, 90); // Верхний правый угол
+                windowPath.AddArc(windowBounds.X + windowBounds.Width - cornerRadius, windowBounds.Y + windowBounds.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90); // Нижний правый угол
+                windowPath.AddArc(windowBounds.X, windowBounds.Y + windowBounds.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90); // Нижний левый угол
+                windowPath.CloseFigure();
+
+                g.FillPath(Brushes.LightBlue, windowPath);
+            }
 
             // 3. Фары
             g.FillEllipse(Brushes.Yellow,
@@ -134,20 +153,22 @@ namespace race_game.Core {
             g.FillEllipse(Brushes.Black,
                 bounds.X - 5,
                 bounds.Y + 20,
-                15, 25);
+                10, 25);
             g.FillEllipse(Brushes.Black,
-                bounds.X + bounds.Width - 10,
+                bounds.X + bounds.Width - 5,
                 bounds.Y + 20,
-                15, 25);
+                10, 25);
             g.FillEllipse(Brushes.Black,
                 bounds.X - 5,
                 bounds.Y + 55,
-                15, 25);
+                10, 25);
             g.FillEllipse(Brushes.Black,
-                bounds.X + bounds.Width - 10,
+                bounds.X + bounds.Width - 5,
                 bounds.Y + 55,
-                15, 25);
+                10, 25);
         }
+
+
 
         private void DrawHUD(Graphics g, GameState state) {
             Brush player1ScoreBrush = state.IsFirstPlayerOnGrass ? Brushes.Red : Brushes.White;
