@@ -1,95 +1,64 @@
-﻿using race_game.Graphics;
-using race_game.Core;
+﻿using race_game.Core;
 
-namespace race_game.Screens {
+namespace race_game.Screens
+{
     public class GameScreen : Panel {
         private readonly GameState m_state;
         private readonly Renderer m_renderer;
         private readonly System.Windows.Forms.Timer m_game_timer;
+        Action m_game_over_call_back;
 
-        public GameScreen(Action returnToMenuCallback) {
-            // Конфигурация панели
+
+        public GameState GetGameState() {
+            return m_state;
+        }
+
+        public GameScreen(Action gameOverCallBack, int width, int height) {
+            m_game_over_call_back = gameOverCallBack;
             this.Dock = DockStyle.Fill;
             this.DoubleBuffered = true;
 
-            // Инициализация зависимостей
-            m_state = new GameState();
-            m_renderer = new Renderer();
+            m_state = new GameState(width, height);
+            m_renderer = new Renderer(width, height);
 
-            // Настройка таймера игры
-            m_game_timer = new System.Windows.Forms.Timer { Interval = 16 }; // ~60 FPS
-            m_game_timer.Tick += (s, e) => UpdateGame();
-
-            // Обработка ввода
-            this.KeyDown += (s, e) => {
-                switch (e.KeyCode) {
-                    case Keys.Escape:
-                        returnToMenuCallback();
-                        break;
-                    case Keys.W:
-                        m_state.Player1.Speed = 5;
-                        break;
-                        // ... другие клавиши управления
-                }
-            };
+            m_game_timer = new System.Windows.Forms.Timer { Interval = 16 }; 
+            m_game_timer.Tick += GameTimer_Tick;
         }
 
-        public void Initialize(bool isMultiplayer) {
-            // 1. Сброс игрового состояния
-            m_state.IsMultiplayer = isMultiplayer;
-            m_state.Score = 0;
-            m_state.Level = 1;
-            m_state.GameSpeed = 1.0f;
-            m_state.IsPaused = false;
-            m_state.ElapsedTime = TimeSpan.Zero;
-            m_state.Status = GameState.GameStatus.Racing;
-
-            // 2. Инициализация игроков
-            m_state.Player1 = new PlayerState {
-                Position = new Point(400, 500),  // Центр экрана по X, низ по Y
-                Health = 100,
-                Speed = 0,
-                Color = Color.Red
-            };
-
-            if (isMultiplayer) {
-                m_state.Player2 = new PlayerState {
-                    Position = new Point(600, 500),
-                    Health = 100,
-                    Speed = 0,
-                    Color = Color.Blue
-                };
-            }
-            else {
-                m_state.Player2 = null;
-            }
-
-            // 3. Инициализация дороги
-            m_state.Road = new RoadState {
-                ScrollOffset = 0,
-                SegmentCount = 10
-            };
-
-            // 4. Очистка и начальное заполнение трафика
-            m_state.TrafficCars.Clear();
-            for (int i = 0; i < 3; i++)  // Стартовые 3 машины
-            {
-                m_state.TrafficCars.Add(new TrafficCarState {
-                    Bounds = new Rectangle(
-                        new Random().Next(100, 700),  // Случайная позиция по X
-                        -100 - (i * 200),             // Распределение по Y
-                        50, 100),
-                    Speed = 3
-                });
-            }
-
+        public void Start(bool isMultiplayer) {
+            
+            m_state.Init(isMultiplayer);
             m_game_timer.Start();
         }
+        public void Pause(bool isPaused) {
+            if (isPaused) {
+                m_state.Status = GameState.GameStatus.Paused;
+            }
+            else {
+                m_state.Status = GameState.GameStatus.Racing;
+            }
+        }
 
-        private void UpdateGame() {
+        public void HandleKeyDown(object? sender, KeyEventArgs? e) {
             if (m_state.Status == GameState.GameStatus.Racing) {
-                m_state.Update(); // Обновление позиций машин/дороги
-                this.Invalidate(); // Триггер перерисовки
+                m_state.HashSetPressedKeys.Add(e.KeyCode);
+            }
+        }
+
+        public void HandleKeyUp(object? sender, KeyEventArgs? e) {
+            if (m_state.Status == GameState.GameStatus.Racing) {
+                m_state.HashSetPressedKeys.Remove(e.KeyCode);
+            }
+        }
+
+        private void GameTimer_Tick(object? sender, EventArgs? e) {
+            if (m_state.Status == GameState.GameStatus.Racing) {
+                m_state.Update();
+
+                if (m_state.Status == GameState.GameStatus.GameOver) {
+                    m_game_over_call_back();
+                }
+                this.Invalidate();
             }
         }
 

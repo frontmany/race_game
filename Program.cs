@@ -11,16 +11,9 @@ static class Program {
 
         var mainForm = new Form {
             Text = "Racing Game",
-            FormBorderStyle = FormBorderStyle.None, // Убираем рамку
-            WindowState = FormWindowState.Maximized, // Полноэкранный режим
-            Bounds = Screen.PrimaryScreen.Bounds // Занимаем весь экран
-        };
-
-        // Обработчик для выхода по Alt+F4 или Escape
-        mainForm.KeyPreview = true;
-        mainForm.KeyDown += (s, e) => {
-            if (e.KeyCode == Keys.Escape || (e.Alt && e.KeyCode == Keys.F4))
-                Application.Exit();
+            FormBorderStyle = FormBorderStyle.None,
+            WindowState = FormWindowState.Maximized,
+            Bounds = Screen.PrimaryScreen?.Bounds ?? new Rectangle(0, 0, 640, 480)
         };
 
         new GameEngine(mainForm);

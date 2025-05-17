@@ -1,15 +1,21 @@
-﻿using System;
+﻿using race_game.Core;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
-using race_game.Graphics;
 
 namespace race_game.Screens {
     public class MainMenuScreen : Panel {
-        private readonly Action<bool> _startGameCallback;
-        private Button[] _menuButtons;
+        private readonly Action<bool>   m_start_game_callback;
+        private Form                    m_main_form;
+        private Button[]                m_array_menu_buttons;
+        int                             m_buttons_count = 3;
+        int                             m_selected_index = 0;
 
-        public MainMenuScreen(Action<bool> startGameCallback) {
-            _startGameCallback = startGameCallback;
+        public MainMenuScreen(Action<bool> startGameCallback, Form mainForm) {
+            m_start_game_callback = startGameCallback;
+            m_main_form = mainForm;
+            m_array_menu_buttons = new Button[m_buttons_count];
+
 
             InitializeUI();
             SetupButtonHandlers();
@@ -19,15 +25,13 @@ namespace race_game.Screens {
             this.Dock = DockStyle.Fill;
             this.BackColor = Color.Navy;
 
-            // Центральный контейнер для выравнивания
             var centerPanel = new Panel {
-                Size = new Size(400, 600), // Фиксированный размер центральной области
-                Location = new Point((this.Width + 10) * 2, 0),
+                Size = new Size(400, 600),
+                Location = new Point((m_main_form.Width - 400) / 2, (m_main_form.Height - 600) / 2),
                 BackColor = Color.Transparent
             };
             this.Controls.Add(centerPanel);
 
-            // Заголовок (центрирован в центральной панели)
             var titleLabel = new Label {
                 Text = "RACING GAME",
                 Font = new Font("Arial", 36, FontStyle.Bold),
@@ -39,24 +43,52 @@ namespace race_game.Screens {
             };
             centerPanel.Controls.Add(titleLabel);
 
-            // Кнопки меню (вертикально в центре)
-            string[] menuItems = { "Single Player", "Multiplayer", "Exit" };
-            _menuButtons = new Button[menuItems.Length];
-
-            int buttonY = 300; // Начальная позиция Y для первой кнопки
+            string[] menuItemsNames = { "Single Player", "Multiplayer", "Exit" };
+            int buttonY = 300;
             int buttonWidth = 300;
             int buttonHeight = 50;
             int buttonSpacing = 30;
 
-            for (int i = 0; i < menuItems.Length; i++) {
-                _menuButtons[i] = CreateMenuButton(
-                    menuItems[i],
-                    (centerPanel.Width - buttonWidth) / 2, // Центрирование по X
-                    buttonY + i * (buttonHeight + buttonSpacing),
-                    buttonWidth,
-                    buttonHeight);
-                centerPanel.Controls.Add(_menuButtons[i]);
+            for (int i = 0; i < m_buttons_count; i++) {
+                m_array_menu_buttons[i] = CreateMenuButton(
+                   menuItemsNames[i],
+                   (centerPanel.Width - buttonWidth) / 2,
+                   buttonY + i * (buttonHeight + buttonSpacing),
+                   buttonWidth,
+                   buttonHeight);
+                centerPanel.Controls.Add(m_array_menu_buttons[i]);
             }
+        }
+
+
+        public void HandleKeyDown(object? sender, KeyEventArgs? e) {
+            switch (e.KeyCode) {
+                case Keys.W:
+                    m_selected_index = ((m_selected_index - 1 + m_buttons_count) % m_buttons_count);
+                    m_array_menu_buttons[m_selected_index].Focus();
+                    HighlightButton(m_array_menu_buttons[m_selected_index]);
+                    e.Handled = true;
+                    break;
+
+                case Keys.S:
+                    m_selected_index = ((m_selected_index + 1) % m_buttons_count);
+                    m_array_menu_buttons[m_selected_index].Focus();
+                    HighlightButton(m_array_menu_buttons[m_selected_index]);
+                    e.Handled = true;
+                    break;
+
+                case Keys.Enter:
+                    m_array_menu_buttons[m_selected_index].PerformClick();
+                    e.Handled = true;
+                    break;
+            }
+
+        }
+
+        public void HandleKeyUp(object? sender, KeyEventArgs? e) { }
+
+        public void HandleKeyboardEvent(object? sender, KeyEventArgs? e) {
+            
         }
 
         private Button CreateMenuButton(string text, int xPos, int yPos, int width, int height) {
@@ -69,30 +101,34 @@ namespace race_game.Screens {
                 Size = new Size(width, height),
                 Location = new Point(xPos, yPos),
                 TabStop = true,
-                Tag = Array.IndexOf(_menuButtons, text)
+                Tag = Array.IndexOf(m_array_menu_buttons, text)
             };
 
             button.FlatAppearance.BorderSize = 0;
-            button.MouseEnter += (s, e) => HighlightButton((Button)s);
+            button.MouseEnter += (s, e) => {
+                var btn = s as Button;
+                if (btn != null) {
+                    HighlightButton(btn);
+                }
+            };
+
 
             return button;
         }
 
         private void SetupButtonHandlers() {
-            _menuButtons[0].Click += (s, e) => _startGameCallback(false);
-            _menuButtons[0].Focus();
-            _menuButtons[1].Click += (s, e) => _startGameCallback(true);
-            _menuButtons[2].Click += (s, e) => Application.Exit();
+            m_array_menu_buttons[0].Click += (s, e) => m_start_game_callback(false);
+            m_array_menu_buttons[1].Click += (s, e) => m_start_game_callback(true);
+            m_array_menu_buttons[2].Click += (s, e) => Application.Exit();
+
+            m_array_menu_buttons[0].Focus();
+            HighlightButton(m_array_menu_buttons[0]);
         }
 
         private void HighlightButton(Button button) {
-            foreach (var btn in _menuButtons) {
-                // Изменение цвета текста и шрифта
+            foreach (var btn in m_array_menu_buttons) {
                 btn.ForeColor = btn == button ? Color.Yellow : Color.White;
-                btn.Font = new Font("Arial", 24,
-                    btn == button ? FontStyle.Bold : FontStyle.Regular);
-
-                // Изменение фона кнопки с сохранением стиля
+                btn.Font = new Font("Arial", 24, btn == button ? FontStyle.Bold : FontStyle.Regular);
                 btn.BackColor = btn == button ? Color.Navy : Color.Transparent;
                 btn.FlatAppearance.MouseOverBackColor = Color.Navy;
                 btn.FlatAppearance.MouseDownBackColor = Color.Navy;
