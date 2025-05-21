@@ -13,6 +13,9 @@ Race Game is a fun and easy-to-play car racing game made with C# and WinForms. C
 
 **Can you outlast your friend and become the ultimate racer?** 🚀  
 
+classes diagram:
+https://disk.yandex.com/i/nfca6luAA2Hy-w
+
 ![Main Menu](./screenshots/menu.jpg)
 ![Single Player Mode](./screenshots/singlePlayer.jpg)
 ![Multi Player Mode](./screenshots/multiPlayer.jpg)
