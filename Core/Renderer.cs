@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing.Drawing2D;
 
 namespace race_game.Core {
     public class Renderer {
@@ -9,12 +8,11 @@ namespace race_game.Core {
         private readonly Brush  m_traffic_car_brush ;
         private readonly Brush  m_player_2_car_brush;
         private readonly Font   m_hud_font;
-        private readonly Font   m_pause_font;
         private readonly Brush  m_grass_brush;
-        private readonly Brush  m_tree_brush;
         private int             m_main_form_width, m_main_form_height;
 
         public Renderer(int mainFormWidth, int mainFormHeight) {
+            
             m_main_form_width = mainFormWidth;
             m_main_form_height = mainFormHeight;
             m_road_marking_pen = new Pen(Color.White, 2);
@@ -23,9 +21,7 @@ namespace race_game.Core {
             m_traffic_car_brush = new SolidBrush(Color.Gray);
             m_player_2_car_brush = new SolidBrush(Color.Blue);
             m_hud_font = new Font("Arial", 16);
-            m_pause_font = new Font("Arial", 32);
             m_grass_brush = new SolidBrush(Color.ForestGreen);
-            m_tree_brush = new SolidBrush(Color.DarkGreen);
         }
     
 

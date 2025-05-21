@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("race_game")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+390233c51afe756195ffd6dcf7dd509019af672f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d8383dedb2e4e94dc76d9da357d14447a1c82397")]
 [assembly: System.Reflection.AssemblyProductAttribute("race_game")]
 [assembly: System.Reflection.AssemblyTitleAttribute("race_game")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

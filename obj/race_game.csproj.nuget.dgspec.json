@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\prj\\race_game\\race_game.csproj": {}
+    "C:\\prj\\race_game\\race_game\\race_game.csproj": {}
   },
   "projects": {
-    "C:\\prj\\race_game\\race_game.csproj": {
+    "C:\\prj\\race_game\\race_game\\race_game.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\prj\\race_game\\race_game.csproj",
+        "projectUniqueName": "C:\\prj\\race_game\\race_game\\race_game.csproj",
         "projectName": "race_game",
-        "projectPath": "C:\\prj\\race_game\\race_game.csproj",
-        "packagesPath": "C:\\Users\\fmtab\\.nuget\\packages\\",
-        "outputPath": "C:\\prj\\race_game\\obj\\",
+        "projectPath": "C:\\prj\\race_game\\race_game\\race_game.csproj",
+        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+        "outputPath": "C:\\prj\\race_game\\race_game\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\fmtab\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -39,7 +43,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0-windows7.0": {
@@ -63,7 +68,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -7,12 +7,15 @@ namespace race_game.Screens
         private readonly GameState                  m_state;
         private readonly Renderer                   m_renderer;
         Action                                      m_game_over_call_back;
+        decimal                                     m_scaling_factor;
 
-        public GameScreen(Action gameOverCallBack, int mainFormWidth, int mainFormHeight) {
+        public GameScreen(Action gameOverCallBack, int mainFormWidth, int mainFormHeight, decimal scalingFactor) {
+            m_scaling_factor = scalingFactor;
             m_game_over_call_back = gameOverCallBack;
+            m_scaling_factor = scalingFactor;
             this.Dock = DockStyle.Fill;
 
-            m_state = new GameState(mainFormWidth, mainFormHeight);
+            m_state = new GameState(mainFormWidth, mainFormHeight, m_scaling_factor);
             m_renderer = new Renderer(mainFormWidth, mainFormHeight);
 
             m_game_timer = new System.Windows.Forms.Timer { Interval = 1 }; 

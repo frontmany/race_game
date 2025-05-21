@@ -10,9 +10,9 @@ namespace race_game.Core {
         private int     m_player_width;
         private int     m_player_height;
         private int     m_road_left, m_road_width;
-        private float   m_traffic_spawn_rate ; 
-        private float   m_max_traffic_spawn_rate; 
-        private float   m_difficulty_increase_interval;
+        private float   m_traffic_spawn_rate; 
+        decimal m_scaling_factor;
+        int m_car_spawn_Yoffset;
 
         public enum GameStatus {
             Racing,
@@ -20,7 +20,9 @@ namespace race_game.Core {
             GameOver
         }
 
-        public GameState(int mainFormWidth, int mainFormHeight) {
+        public GameState(int mainFormWidth, int mainFormHeight, decimal scalingFactor) {
+            m_car_spawn_Yoffset = 0;
+            m_scaling_factor = scalingFactor;
             m_random = new Random();
             m_main_form_width = mainFormWidth;
             m_main_form_height = mainFormHeight;
@@ -28,8 +30,6 @@ namespace race_game.Core {
             m_player_width = 50;
             m_player_height = 100;
             m_traffic_spawn_rate = 0.4f;
-            m_max_traffic_spawn_rate = 0.001f;
-            m_difficulty_increase_interval = 30.0f;
             m_road_width = IsMultiplayer ? m_main_form_width / 2 - 20 : m_main_form_width / 2;
             m_road_left = IsMultiplayer ? 10 : (m_main_form_width - m_road_width) / 2;
             HashSetPressedKeys = new HashSet<Keys>();
@@ -38,6 +38,20 @@ namespace race_game.Core {
             TrafficCars = new();
             Player1Score = 0;
             Player2Score = 0;
+
+
+            if (m_scaling_factor <= 1.0m) {
+                m_car_spawn_Yoffset = 0;
+            }
+            else if (m_scaling_factor <= 1.25m) {
+                m_car_spawn_Yoffset = 100;
+            }
+            else if (m_scaling_factor <= 1.5m) {
+                m_car_spawn_Yoffset = 200;
+            }
+            else {
+                m_car_spawn_Yoffset = 200 + (int)((m_scaling_factor - 1.5m) * 200);
+            }
         }
 
         public HashSet<Keys> HashSetPressedKeys { get; set; }
@@ -77,25 +91,20 @@ namespace race_game.Core {
             ElapsedTime = TimeSpan.Zero;
             Status = GameStatus.Racing;
 
-            Player1 = new PlayerState {
-                Position = new Point(m_main_form_width / 2 - 10, 800),
-                Color = Color.Red
-            };
-
             if (IsMultiplayer) {
                 Player1 = new PlayerState {
-                    Position = new Point(m_main_form_width / 4, 800),
+                    Position = new Point(m_main_form_width / 4, 800 - m_car_spawn_Yoffset),
                     Color = Color.Red
                 };
 
                 Player2 = new PlayerState {
-                    Position = new Point(m_main_form_width * 3 / 4, 800),
+                    Position = new Point(m_main_form_width * 3 / 4, 800 - m_car_spawn_Yoffset),
                     Color = Color.Blue
                 };
             }
             else {
                 Player1 = new PlayerState {
-                    Position = new Point(m_main_form_width / 2, 800), 
+                    Position = new Point(m_main_form_width / 2, 800 - m_car_spawn_Yoffset), 
                     Color = Color.Red
                 };
 

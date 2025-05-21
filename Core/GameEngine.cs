@@ -15,9 +15,11 @@ namespace race_game.Core {
         private PauseMenuScreen m_pause_menu;
         private GameOverScreen  m_game_over_screen;
         int                     m_main_form_width, m_main_form_height;
+        decimal                 m_scaling_factor;
 
-        public GameEngine(Form mainForm) {
+        public GameEngine(Form mainForm, decimal scalingFactor) {
             CurrentScreen = CurrentScreen.MainMenu;
+            m_scaling_factor = scalingFactor;
             m_main_form = mainForm;
             m_main_form.KeyPreview = true;
             m_main_form_width = mainForm.ClientSize.Width;
@@ -36,7 +38,7 @@ namespace race_game.Core {
             m_pause_menu.SetupButtonHandlers();
             m_pause_menu.Visible = false;
 
-            m_game = new GameScreen(ShowGameOver, m_main_form_width, m_main_form_height);
+            m_game = new GameScreen(ShowGameOver, m_main_form_width, m_main_form_height, m_scaling_factor);
             m_game.Visible = false;
 
             m_game_over_screen = new GameOverScreen(ReturnToMenu, m_main_form_width, m_main_form_height);
